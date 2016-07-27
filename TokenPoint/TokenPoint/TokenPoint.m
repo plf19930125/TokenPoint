@@ -20,16 +20,49 @@
 
 @implementation TokenPoint
 
--(TokenPoint *) init:(nullable NSString *) baseUrl
++(TokenPoint*) sharedInstance
 {
-    tpImpl = [TokenPointImpl alloc];
-    [tpImpl init:baseUrl];
+    static dispatch_once_t pred = 0;
+    __strong static id instance = nil;
+    dispatch_once(&pred , ^{
+        instance = [[TokenPoint alloc] init];
+    });
+    return (TokenPoint*)instance;
+}
+
+-(instancetype) init
+{
+    if(self = [super init])
+    {
+        tpImpl = [TokenPointImpl Instance];
+    }
     return self;
+}
+
+-(void) init:(nullable NSString*)appId  baseUrl:(nullable NSString *) baseUrl
+{
+    //tpImpl = [TokenPointImpl alloc];
+    //[tpImpl init:appId baseUrl:baseUrl];
+    if(nil == tpImpl)
+    {
+        tpImpl = [TokenPointImpl Instance];
+    }
+    [tpImpl init:appId baseUrl:baseUrl];
+    
 }
 
 -(void) log:(nonnull NSDictionary * ) params
 {
-    [tpImpl log:params requestid:@"1" success:nil failure:nil];
+    if(nil == tpImpl || nil == params)
+        return;
+    
+    //[tpImpl log:params requestid:@"1" success:nil failure:nil];
+    //[tpImpl log:params success:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, id  _Nullable responseObject) {
+    //    NSLog(@"LOG SUCCESS !!!!  requestId is ... %@ ..." , requestid);
+    //} failure:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error) {
+    //    NSLog(@"LOG FAILED !!!!  requestId is ... %@ ..." , requestid);
+    //}];
+    [tpImpl log:params];
 }
 
 

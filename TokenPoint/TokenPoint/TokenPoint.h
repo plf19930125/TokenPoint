@@ -12,7 +12,10 @@
 
 @interface TokenPoint : NSObject
 
--(nonnull TokenPoint *) init:(nullable NSString *) baseUrl;
++(TokenPoint*) sharedInstance;
+
+
+-(void) init:(nullable NSString*)appId baseUrl:(nullable NSString *) baseUrl;
 -(void) log:(nonnull NSDictionary * ) params;
 
 @end
