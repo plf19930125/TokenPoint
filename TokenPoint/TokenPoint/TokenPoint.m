@@ -20,7 +20,7 @@
 
 @implementation TokenPoint
 
-+(TokenPoint*) sharedInstance
++(nullable TokenPoint*) sharedInstance
 {
     static dispatch_once_t pred = 0;
     __strong static id instance = nil;
@@ -51,9 +51,9 @@
     
 }
 
--(void) log:(nonnull NSDictionary * ) params
+-(void) log:(nullable NSString * ) logMsg
 {
-    if(nil == tpImpl || nil == params)
+    if(nil == tpImpl || nil == logMsg)
         return;
     
     //[tpImpl log:params requestid:@"1" success:nil failure:nil];
@@ -62,8 +62,23 @@
     //} failure:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error) {
     //    NSLog(@"LOG FAILED !!!!  requestId is ... %@ ..." , requestid);
     //}];
-    [tpImpl log:params];
+    [tpImpl log:logMsg];
 }
 
+-(nullable NSString*) GetIDFA
+{
+    if(tpImpl != nil)
+        return [tpImpl GetIDFA];
+    
+    return nil;
+}
+
+-(nullable NSString*) GetMacAddress
+{
+    if( tpImpl != nil)
+        return [tpImpl GetMacAddress];
+    
+    return nil;
+}
 
 @end

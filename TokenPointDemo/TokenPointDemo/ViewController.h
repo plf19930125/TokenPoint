@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TokenPoint/TokenPoint.h"
 
 @interface ViewController : UIViewController
 
+@property (nonatomic , weak) IBOutlet UIButton* clickBtn;
+
+-(IBAction)onClickBITest:(id)sender;
 
 @end
 

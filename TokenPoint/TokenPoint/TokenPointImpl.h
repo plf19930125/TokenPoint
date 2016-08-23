@@ -13,7 +13,7 @@
 
 @interface TokenPointImpl : NSObject
 
-+(nonnull TokenPointImpl*) Instance;
++(nullable TokenPointImpl*) Instance;
 
 -(void) init:(nullable NSString*)appId baseUrl:(nullable NSString *) baseUrl;
 -(void) SetAppId:(nullable NSString*)appId;
@@ -21,15 +21,18 @@
 -(void) SetBaseUrl:(nullable NSString*)baseUrl;
 -(nullable NSString*) GetBaseUrl;
 
+-(nullable NSString*) GetIDFA;
+-(nullable NSString*) GetMacAddress;
+
 -(nullable NSString*) GetRequestId;
 
--(void) log:(nonnull NSDictionary * ) params
+-(void) log:(nonnull NSString * ) logMsg
   requestid:(nullable NSString * )requestid
     success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid,id  _Nullable responseObject))success
     failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error))failure;
 
--(void) log:(nonnull NSDictionary *) params  success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid,id  _Nullable responseObject))success  failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error))failure;
+-(void) log:(nonnull NSString *) logMsg  success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid,id  _Nullable responseObject))success  failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error))failure;
 
--(void) log:(nonnull NSDictionary*) params;
+-(void) log:(nonnull NSString*) logMsg;
 
 @end

@@ -6,6 +6,14 @@
 //  Copyright © 2016年 zulong. All rights reserved.
 //
 
+#import <AdSupport/AdSupport.h>
+#import <sys/utsname.h>
+#import <sys/sysctl.h>
+#import <mach/mach.h>
+
+#include <net/if.h>
+#include <net/if_dl.h>
+
 #import "TokenPointImpl.h"
 
 @import AFNetworking;
@@ -26,7 +34,7 @@
 //AFHTTPSessionManager * httpManager = nil;
 
 
-+(nonnull TokenPointImpl*) Instance
++(nullable TokenPointImpl*) Instance
 {
     static dispatch_once_t pred = 0;
     __strong static id instance = nil;
@@ -75,22 +83,23 @@
     return requestId;
 }
 
--(void) saveLogs:(nonnull NSString*)requestId Params:(nullable NSDictionary*)params
+-(void) saveLogs:(nonnull NSString*)requestId Params:(nullable NSString*)params
 {
     if(nil == requestId || nil == params) return;
     
     NSUserDefaults* tokenPointUser = [NSUserDefaults standardUserDefaults];
     NSDictionary* logDic = [tokenPointUser objectForKey:TOKEPOINT_NAME];
     
-    NSMutableDictionary* newLogsDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary* newLogsDic = nil;
     if(nil == logDic)
     {
+        newLogsDic = [[NSMutableDictionary alloc] init];
         [newLogsDic setObject:params forKey:requestId];
     }
     else
     {
         newLogsDic = [[NSMutableDictionary alloc] initWithDictionary:logDic];
-        [newLogsDic setObject:requestId forKey:params];
+        [newLogsDic setObject:params forKey:requestId];
     }
     
     [tokenPointUser setObject:newLogsDic forKey:TOKEPOINT_NAME];
@@ -115,6 +124,7 @@
 
 -(void) init:(nullable NSString*)appId baseUrl:(nullable NSString *) baseUrl
 {
+    //baseUrl = [NSString stringWithFormat:@"%@?gameId=%@&serverId=1&msg=" , baseUrl , appId];
     NSURL * baseurl = [[NSURL alloc] initWithString:baseUrl];
     [self SetAppId:appId];
     [self SetBaseUrl:baseUrl];
@@ -139,12 +149,18 @@
 }
 
 
--(void) log:(nonnull NSDictionary * ) params
+-(void) log:(nonnull NSString * ) params
     requestid:(nullable NSString * )requestid
     success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, id  _Nullable responseObject))success
     failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error))failure
 {
-    [httpManager GET:[self GetBaseUrl] parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSDictionary* paramsDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            [self GetAppId], @"gameId",
+                                            @"1" , @"serverId",
+                                            params , @"msg",
+                                            nil];
+    
+    [httpManager GET:[self GetBaseUrl] parameters:paramsDic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString * result = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSLog(@"%@",result);
         if(requestid != nil)
@@ -157,7 +173,7 @@
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if(error != nil)
-            NSLog(@"%@",error);
+            NSLog(@"Error%@",error);
         if(failure)
             failure(task,requestid,error);
     }];
@@ -165,7 +181,7 @@
 }
 
 
--(void)log:(nonnull NSDictionary *) params
+-(void)log:(nonnull NSString *) logMsg
         success:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid,id  _Nullable responseObject))success
         failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error))failure
 {
@@ -179,13 +195,13 @@
         httpManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain",nil];
     }
     
-    [self saveLogs:curRequestId Params:params];
-    [self log:params requestid:curRequestId success:success failure:failure];
+    [self saveLogs:curRequestId Params:logMsg];
+    [self log:logMsg requestid:curRequestId success:success failure:failure];
 }
 
--(void) log:(nonnull NSDictionary*)params
+-(void) log:(nonnull NSString*)logMsg
 {
-    [self log:params success:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, id  _Nullable responseObject) {
+    [self log:logMsg success:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, id  _Nullable responseObject) {
         NSLog(@"LOG SUCCESS !!!!  requestId is ... %@ ..." , requestid);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error) {
         NSLog(@"LOG FAILED !!!!  requestId is ... %@ ..." , requestid);
@@ -207,7 +223,7 @@
         NSArray* keys = [logDic allKeys];
         for(NSString* key in keys)
         {
-            NSDictionary* params = [logDic objectForKey:key];
+            NSString* params = [logDic objectForKey:key];
             [self log:params requestid:key success:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, id  _Nullable responseObject) {
                 NSLog(@"LOG SUCCESS !!!!  requestId is ... %@ ..." , requestid);
             } failure:^(NSURLSessionDataTask * _Nullable task, NSString * _Nullable requestid, NSError * _Nullable error) {
@@ -218,6 +234,74 @@
     
 }
 
+-(nullable NSString*) GetIDFA
+{
+    NSString* idfa = @"";
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    
+    if(version > 7.0f)
+    {
+        idfa = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    }
+    else
+    {
+        idfa = [self GetMacAddress];
+    }
+    
+    if(idfa == nil)
+    {
+        idfa = @"";
+    }
+    
+    return idfa;
 
+}
+
+-(nullable NSString*) GetMacAddress
+{
+    int                 mib[6];
+    size_t              len;
+    char                *buf;
+    unsigned char       *ptr;
+    struct if_msghdr    *ifm;
+    struct sockaddr_dl  *sdl;
+    
+    mib[0] = CTL_NET;
+    mib[1] = AF_ROUTE;
+    mib[2] = 0;
+    mib[3] = AF_LINK;
+    mib[4] = NET_RT_IFLIST;
+    
+    if ((mib[5] = if_nametoindex("en0")) == 0) {
+        NSLog(@"Error: if_nametoindex error...");
+        return nil;
+    }
+    
+    if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
+        NSLog(@"Error: sysctl error...");
+        return nil;
+    }
+    
+    if ((buf = malloc(len)) == NULL) {
+        NSLog(@"Could not allocate memory. error!");
+        return nil;
+    }
+    
+    if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
+        NSLog(@"Error: sysctl, take 2...");
+        return nil;
+    }
+    
+    ifm = (struct if_msghdr *)buf;
+    sdl = (struct sockaddr_dl *)(ifm + 1);
+    ptr = (unsigned char *)LLADDR(sdl);
+    NSString *outstring = [NSString stringWithFormat:@"%02x:%02x:%02x:%02x:%02x:%02x", *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
+    
+    //NSLog(@"outString:%@", outstring);
+    
+    free(buf);
+    
+    return [outstring uppercaseString];
+}
 
 @end

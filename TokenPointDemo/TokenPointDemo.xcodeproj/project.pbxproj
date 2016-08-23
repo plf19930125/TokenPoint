@@ -13,9 +13,11 @@
 		7865932D1D2D1143000770DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7865932B1D2D1143000770DA /* Main.storyboard */; };
 		7865932F1D2D1143000770DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7865932E1D2D1143000770DA /* Assets.xcassets */; };
 		786593321D2D1143000770DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 786593301D2D1143000770DA /* LaunchScreen.storyboard */; };
-		786593421D2D172A000770DA /* TokenPoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 786593391D2D1232000770DA /* TokenPoint.framework */; };
-		786593431D2D173D000770DA /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7865933D1D2D1263000770DA /* AFNetworking.framework */; };
-		786593441D2D173D000770DA /* AFNetworking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7865933D1D2D1263000770DA /* AFNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8DC77D761D51E1CD007AC677 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC77D751D51E1CD007AC677 /* AFNetworking.framework */; };
+		8DC77D771D51E243007AC677 /* TokenPoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC77D6C1D51C7A5007AC677 /* TokenPoint.framework */; };
+		8DC77D781D51E26E007AC677 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC77D751D51E1CD007AC677 /* AFNetworking.framework */; };
+		8DC77D791D51E26E007AC677 /* AFNetworking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC77D751D51E1CD007AC677 /* AFNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8DC77D7D1D6C4DCA007AC677 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC77D7C1D6C4DCA007AC677 /* AdSupport.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,7 +27,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				786593441D2D173D000770DA /* AFNetworking.framework in Embed Frameworks */,
+				8DC77D791D51E26E007AC677 /* AFNetworking.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -43,8 +45,9 @@
 		7865932E1D2D1143000770DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		786593311D2D1143000770DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		786593331D2D1143000770DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		786593391D2D1232000770DA /* TokenPoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TokenPoint.framework; path = ../../TokenPoint.framework; sourceTree = "<group>"; };
-		7865933D1D2D1263000770DA /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = ../AFNetworking.framework; sourceTree = "<group>"; };
+		8DC77D6C1D51C7A5007AC677 /* TokenPoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TokenPoint.framework; path = ../TokenPoint/TokenPoint.framework; sourceTree = "<group>"; };
+		8DC77D751D51E1CD007AC677 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = ../AFNetWorking/AFNetworking.framework; sourceTree = "<group>"; };
+		8DC77D7C1D6C4DCA007AC677 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +55,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				786593421D2D172A000770DA /* TokenPoint.framework in Frameworks */,
-				786593431D2D173D000770DA /* AFNetworking.framework in Frameworks */,
+				8DC77D7D1D6C4DCA007AC677 /* AdSupport.framework in Frameworks */,
+				8DC77D771D51E243007AC677 /* TokenPoint.framework in Frameworks */,
+				8DC77D781D51E26E007AC677 /* AFNetworking.framework in Frameworks */,
+				8DC77D761D51E1CD007AC677 /* AFNetworking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,8 +68,9 @@
 		786593161D2D1143000770DA = {
 			isa = PBXGroup;
 			children = (
-				7865933D1D2D1263000770DA /* AFNetworking.framework */,
-				786593391D2D1232000770DA /* TokenPoint.framework */,
+				8DC77D7C1D6C4DCA007AC677 /* AdSupport.framework */,
+				8DC77D751D51E1CD007AC677 /* AFNetworking.framework */,
+				8DC77D6C1D51C7A5007AC677 /* TokenPoint.framework */,
 				786593211D2D1143000770DA /* TokenPointDemo */,
 				786593201D2D1143000770DA /* Products */,
 			);
@@ -134,7 +140,7 @@
 				TargetAttributes = {
 					7865931E1D2D1143000770DA = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = D3SSD9V2BR;
+						DevelopmentTeam = EXHFBWBL96;
 					};
 				};
 			};
@@ -291,12 +297,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"~/Documents",
-					"~/Documents/git",
+					/Users/zl3d/Documents/TokenPoint/TokenPoint,
+					/Users/zl3d/Documents/TokenPoint/AFNetWorking,
 				);
 				INFOPLIST_FILE = TokenPointDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zulong.com.TokenPointDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -308,12 +315,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"~/Documents",
-					"~/Documents/git",
+					/Users/zl3d/Documents/TokenPoint/TokenPoint,
+					/Users/zl3d/Documents/TokenPoint/AFNetWorking,
 				);
 				INFOPLIST_FILE = TokenPointDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = zulong.com.TokenPointDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -339,6 +347,7 @@
 				786593381D2D1143000770DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

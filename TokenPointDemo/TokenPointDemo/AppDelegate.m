@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-
-@import TokenPoint;
+#import "TokenPoint/TokenPoint.h"
+//@import TokenPoint;
 
 
 @interface AppDelegate ()
@@ -21,10 +21,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    TokenPoint * tp = [[TokenPoint alloc] init:@"http://log.hz.zulong.com:8080/clientBiLog"];
+    //TokenPoint * tp = [[TokenPoint alloc] init:@"http://log.hz.zulong.com:8080/clientBiLog"];
     //TokenPoint * tp = [[TokenPoint alloc] init:@"https://github.com"];
-    [tp log:@{@"gameId":@1, @"serverId":@2, @"msg":@"mytest"}];
-    
+    //[tp log:@{@"gameId":@1, @"serverId":@2, @"msg":@"mytest"}];
+    //init with appid and baseUrl
+    TokenPoint* tpInstance = [TokenPoint sharedInstance];
+    [tpInstance init:@"207" baseUrl:@"http://log.zj.zulong.com:8080/clientBiLog"];
     
     return YES;
 }

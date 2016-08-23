@@ -12,11 +12,14 @@
 
 @interface TokenPoint : NSObject
 
-+(TokenPoint*) sharedInstance;
++(nullable TokenPoint*) sharedInstance;
 
 
 -(void) init:(nullable NSString*)appId baseUrl:(nullable NSString *) baseUrl;
--(void) log:(nonnull NSDictionary * ) params;
+-(void) log:(nullable NSString * ) logMsg;
+
+-(nullable NSString*) GetIDFA;
+-(nullable NSString*) GetMacAddress;
 
 @end
 
